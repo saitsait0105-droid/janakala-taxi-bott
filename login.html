@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Кіру — Жанақала Такси Admin</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Inter", -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: #f5f6fa; height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0;
+  }
+  .box { background: white; padding: 40px; border-radius: 16px; width: 300px; text-align: center; box-shadow: 0 1px 2px rgba(16,24,40,0.04), 0 8px 24px rgba(16,24,40,0.06); }
+  h2 { margin-top: 0; color: #14161f; font-size: 18px; }
+  input { width: 100%; padding: 11px 12px; margin: 14px 0; border: 1px solid #eceef2; border-radius: 9px; font-size: 14px; }
+  input:focus { outline: none; border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79,70,229,0.12); }
+  button { width: 100%; padding: 11px; background: #4f46e5; color: white; border: none; border-radius: 9px; cursor: pointer; font-size: 14px; font-weight: 600; }
+  button:hover { opacity: 0.9; }
+  p { color: #b91c1c; font-size: 13px; }
+</style>
+</head>
+<body>
+  <div class="box">
+    <h2>🚕 Жанақала Такси</h2>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}{% for m in messages %}<p>{{ m }}</p>{% endfor %}{% endif %}
+    {% endwith %}
+    <form method="POST">
+      <input type="password" name="password" placeholder="Құпия сөз" required>
+      <button type="submit">Кіру</button>
+    </form>
+  </div>
+</body>
+</html>

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Жанақала Такси — Admin</title>
+<style>
+  :root {
+    --bg: #f5f6fa;
+    --card: #ffffff;
+    --primary: #4f46e5;
+    --primary-dark: #3f36c9;
+    --text: #14161f;
+    --muted: #6b7280;
+    --border: #eceef2;
+    --radius: 14px;
+    --shadow: 0 1px 2px rgba(16,24,40,0.04), 0 1px 6px rgba(16,24,40,0.05);
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Inter", -apple-system, "Segoe UI", Roboto, sans-serif;
+    margin: 0; background: var(--bg); color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+  nav {
+    background: var(--card); border-bottom: 1px solid var(--border);
+    padding: 14px 28px; display: flex; justify-content: space-between; align-items: center;
+    position: sticky; top: 0; z-index: 10;
+  }
+  nav .brand { font-weight: 700; font-size: 15px; color: var(--text); margin-right: 28px; display: inline-flex; align-items: center; gap: 8px; }
+  nav .links a {
+    color: var(--muted); text-decoration: none; margin-right: 6px; font-size: 14px;
+    padding: 8px 14px; border-radius: 999px; transition: all .15s ease;
+  }
+  nav .links a:hover { background: var(--bg); color: var(--text); }
+  nav .links a.active { background: var(--primary); color: white; }
+  nav .logout { color: var(--muted); text-decoration: none; font-size: 14px; padding: 8px 14px; border-radius: 999px; }
+  nav .logout:hover { background: var(--bg); color: var(--text); }
+  .container { max-width: 1160px; margin: 32px auto; padding: 0 24px; }
+  h1 { font-size: 20px; font-weight: 700; margin: 0 0 18px; letter-spacing: -0.01em; }
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 32px; }
+  .stat-card {
+    background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+    padding: 18px 20px; box-shadow: var(--shadow);
+  }
+  .stat-card .num { font-size: 24px; font-weight: 700; color: var(--text); letter-spacing: -0.01em; }
+  .stat-card .label { font-size: 12.5px; color: var(--muted); margin-top: 6px; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; }
+  table { width: 100%; border-collapse: collapse; background: var(--card); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); border: 1px solid var(--border); }
+  th, td { padding: 13px 16px; text-align: left; font-size: 13.5px; border-bottom: 1px solid var(--border); }
+  tr:last-child td { border-bottom: none; }
+  th { background: #fafafc; color: var(--muted); font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.03em; }
+  .badge { padding: 4px 11px; border-radius: 999px; font-size: 11.5px; font-weight: 600; display: inline-block; }
+  .badge-open { background: #eef2ff; color: #4338ca; }
+  .badge-accepted { background: #fff7ed; color: #c2410c; }
+  .badge-arrived { background: #eff6ff; color: #1d4ed8; }
+  .badge-completed { background: #ecfdf5; color: #047857; }
+  .badge-cancelled { background: #fef2f2; color: #b91c1c; }
+  .badge-local { background: #f3f4f6; color: #374151; }
+  .badge-intercity { background: #fdf4ff; color: #a21caf; }
+  .badge-taxi { background: #eef2ff; color: #4338ca; }
+  .badge-delivery { background: #fff7ed; color: #c2410c; }
+  .btn {
+    padding: 7px 14px; border-radius: 8px; border: 1px solid transparent; font-size: 12.5px;
+    font-weight: 600; cursor: pointer; color: white; transition: opacity .15s ease;
+  }
+  .btn:hover { opacity: 0.88; }
+  .btn-complete { background: #16a34a; }
+  .btn-cancel { background: #dc2626; }
+  .btn-primary { background: var(--primary); }
+  .btn-ghost { background: var(--card); color: var(--text); border-color: var(--border); }
+  form.inline { display: inline; margin-right: 6px; }
+  .filters { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
+  .filters a {
+    font-size: 13px; color: var(--muted); text-decoration: none; padding: 7px 14px;
+    border-radius: 999px; border: 1px solid var(--border); background: var(--card);
+  }
+  .filters a.active { background: var(--primary); color: white; border-color: var(--primary); }
+  input, select, textarea {
+    width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 9px;
+    font-size: 14px; font-family: inherit; background: #fff; color: var(--text);
+  }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79,70,229,0.12); }
+  label.field-label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 13.5px; }
+  .hint { font-size: 12.5px; color: var(--muted); margin-top: 0; margin-bottom: 14px; }
+  .flash { background: #fef2f2; color: #b91c1c; padding: 12px 16px; border-radius: 10px; font-size: 13.5px; margin-bottom: 16px; }
+</style>
+</head>
+<body>
+<nav>
+  <div style="display:flex; align-items:center;">
+    <span class="brand">🚕 Жанақала Такси</span>
+    <span class="links">
+      <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.endpoint == 'dashboard' }}">Басты бет</a>
+      <a href="{{ url_for('rides') }}" class="{{ 'active' if request.endpoint == 'rides' }}">Тапсырыстар</a>
+      <a href="{{ url_for('users') }}" class="{{ 'active' if request.endpoint == 'users' }}">Пайдаланушылар</a>
+      <a href="{{ url_for('broadcast') }}" class="{{ 'active' if request.endpoint == 'broadcast' }}">Хабарлама</a>
+      <a href="{{ url_for('settings') }}" class="{{ 'active' if request.endpoint == 'settings' }}">Баптаулар</a>
+    </span>
+  </div>
+  <a class="logout" href="{{ url_for('logout') }}">Шығу</a>
+</nav>
+<div class="container">
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}{% for m in messages %}<div class="flash">{{ m }}</div>{% endfor %}{% endif %}
+  {% endwith %}
+  {% block content %}{% endblock %}
+</div>
+</body>
+</html>
