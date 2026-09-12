@@ -1,0 +1,36 @@
+services:
+  # ⚠️ IMPORTANT: Render's free Web Services do NOT have a persistent disk —
+  # the SQLite file (taxi.db) will be WIPED every time the service redeploys or restarts
+  # (including after it spins down from inactivity and spins back up on some occasions).
+  # Fine for testing; for real data you'd want a paid Render disk, or Railway/a VPS instead.
+
+  # Telegram bot — runs in webhook mode so it fits Render's free *Web Service* tier
+  # (Render's free plan has no free Background Worker, only free Web Services)
+  - type: web
+    name: zhanakala-taxi-bot
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python3 bot.py
+    envVars:
+      - key: BOT_TOKEN
+        sync: false          # paste your token from @BotFather in the Render dashboard
+      - key: WEBHOOK_URL
+        sync: false          # paste this service's own Render URL AFTER first deploy, e.g. https://zhanakala-taxi-bot.onrender.com
+      - key: PORT
+        value: "10000"
+
+  # Admin web panel
+  - type: web
+    name: zhanakala-taxi-admin
+    env: python
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: python3 admin_app.py
+    envVars:
+      - key: ADMIN_PASSWORD
+        sync: false          # choose your own login password
+      - key: BOT_TOKEN
+        sync: false          # same token as above, needed for the broadcast feature
+      - key: SECRET_KEY
+        generateValue: true
